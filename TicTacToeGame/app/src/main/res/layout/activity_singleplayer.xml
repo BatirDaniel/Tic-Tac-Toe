@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alpha="50"
+    android:scaleType="fitXY"
+    android:gravity="center"
+    android:background="@drawable/_background"
+    tools:context=".SingleplayerActivity">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_edge"
+            android:elevation="50dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:text="Selecteaza optiunile :"
+                android:textAlignment="center"
+                android:textColor="#323131"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/linear1"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/linear2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="30dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:src="@drawable/crossed1"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="30dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:src="@drawable/zero1"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_crossed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="140dp"
+                    android:buttonTint="#FFFF"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <RadioButton
+                    android:id="@+id/rb_zero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:buttonTint="#FFFF"
+                    android:elevation="8dp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="right"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Selecteaza dificultatea :"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="#323131"
+                    android:textStyle="bold"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:textSize="20sp"/>
+                <Spinner
+                    android:id="@+id/spinner_dificulty"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:foreground="@drawable/style_box"
+                    android:backgroundTint="#FFFF"
+                    android:layout_marginRight="35dp"
+                    android:spinnerMode="dropdown"
+                    android:layout_marginTop="20dp"
+                    android:textAlignment="center"
+                    android:textDirection="firstStrong"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp">
+                <EditText
+                    android:id="@+id/playerOneS"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/style_box"
+                    android:textAlignment="center"
+                    android:drawablePadding="8dp"
+                    android:hint="Introdu numele tau"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textColor="#FFFFFF"
+                    android:imeOptions="actionNext"
+                    android:textStyle="italic"
+                    android:ems="10">
+                    <requestFocus/>
+                </EditText>
+                <Button
+                    android:id="@+id/startSingleplayerGameButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/grandient_background"
+                    android:padding="8dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Incepe jocul"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+</RelativeLayout>
