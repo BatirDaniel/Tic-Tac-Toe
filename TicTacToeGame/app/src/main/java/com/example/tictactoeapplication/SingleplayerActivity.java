@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SingleplayerActivity extends AppCompatActivity {
@@ -21,6 +22,12 @@ public class SingleplayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singleplayer);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Singleplayer");
+        }
+
         EditText player = findViewById(R.id.playerOneS);
         RadioButton radioButtonX = findViewById(R.id.rb_crossed);
         RadioButton radioButtonO = findViewById(R.id.rb_zero);
@@ -28,7 +35,7 @@ public class SingleplayerActivity extends AppCompatActivity {
 
         String[] difficultyLevels = {"Easy", "Medium", "Hard"};
         Spinner spinner = findViewById(R.id.spinner_dificulty);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, difficultyLevels);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, difficultyLevels);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
