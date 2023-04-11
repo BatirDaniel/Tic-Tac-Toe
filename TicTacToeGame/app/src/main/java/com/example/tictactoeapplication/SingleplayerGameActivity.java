@@ -490,7 +490,7 @@ public class SingleplayerGameActivity extends AppCompatActivity {
             return evaluateBoard(memo, currentPlayer);
         }
 
-        
+
         if (isMaximizingPlayer) {
             int bestScore = Integer.MIN_VALUE;
             for (int i = 0; i < 3; i++) {
