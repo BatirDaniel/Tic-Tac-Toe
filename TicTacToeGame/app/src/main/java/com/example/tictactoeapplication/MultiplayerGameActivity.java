@@ -1,5 +1,6 @@
 package com.example.tictactoeapplication;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -7,11 +8,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.tictactoeapplication.databinding.ActivityGameBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class GameActivity extends AppCompatActivity {
+public class MultiplayerGameActivity extends AppCompatActivity {
 
     ActivityGameBinding binding;
     private final List<int[]> combinationList = new ArrayList<>();
@@ -23,6 +25,12 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Multiplayer");
+        }
 
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -129,15 +137,15 @@ public class GameActivity extends AppCompatActivity {
             imageView.setImageResource(R.drawable.crossed1);
 
             if (checkResults()){
-                ResultActivity resultActivity = new ResultActivity(GameActivity.this,binding.playerOneName.getText().toString()
-                        + " este castigatorul !",GameActivity.this);
-                resultActivity.setCancelable(false);
-                resultActivity.show();
+                MultiplayerResultActivity multiplayerResultActivity = new MultiplayerResultActivity(MultiplayerGameActivity.this,binding.playerOneName.getText().toString()
+                        + " este castigatorul !", MultiplayerGameActivity.this);
+                multiplayerResultActivity.setCancelable(false);
+                multiplayerResultActivity.show();
             }
             else if (totalSelectedBox == 9){
-                ResultActivity resultActivity = new ResultActivity(GameActivity.this,"Egalitate",GameActivity.this);
-                resultActivity.setCancelable(false);
-                resultActivity.show();
+                MultiplayerResultActivity multiplayerResultActivity = new MultiplayerResultActivity(MultiplayerGameActivity.this,"Egalitate", MultiplayerGameActivity.this);
+                multiplayerResultActivity.setCancelable(false);
+                multiplayerResultActivity.show();
             } else{
                 changePlayerTurn(2);
                 totalSelectedBox++;
@@ -146,15 +154,15 @@ public class GameActivity extends AppCompatActivity {
             imageView.setImageResource(R.drawable.zero1);
 
             if (checkResults()){
-                ResultActivity resultActivity = new ResultActivity(GameActivity.this,binding.playerTwoName.getText().toString()
-                        + " este castigatorul !",GameActivity.this);
-                resultActivity.setCancelable(false);
-                resultActivity.show();
+                MultiplayerResultActivity multiplayerResultActivity = new MultiplayerResultActivity(MultiplayerGameActivity.this,binding.playerTwoName.getText().toString()
+                        + " este castigatorul !", MultiplayerGameActivity.this);
+                multiplayerResultActivity.setCancelable(false);
+                multiplayerResultActivity.show();
             }
             else if (totalSelectedBox == 9){
-                ResultActivity resultActivity = new ResultActivity(GameActivity.this,"Egalitate",GameActivity.this);
-                resultActivity.setCancelable(false);
-                resultActivity.show();
+                MultiplayerResultActivity multiplayerResultActivity = new MultiplayerResultActivity(MultiplayerGameActivity.this,"Egalitate", MultiplayerGameActivity.this);
+                multiplayerResultActivity.setCancelable(false);
+                multiplayerResultActivity.show();
             } else{
                 changePlayerTurn(1);
                 totalSelectedBox++;

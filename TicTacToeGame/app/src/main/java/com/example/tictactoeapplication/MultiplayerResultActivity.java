@@ -9,12 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ResultActivity extends Dialog {
+public class MultiplayerResultActivity extends Dialog {
 
     private  final String message;
-    private final GameActivity gameActivity;
+    private final MultiplayerGameActivity gameActivity;
 
-    public ResultActivity(@NonNull Context context, String message, GameActivity gameActivity){
+    public MultiplayerResultActivity(@NonNull Context context, String message, MultiplayerGameActivity gameActivity){
         super(context);
         this.message = message;
         this.gameActivity = gameActivity;

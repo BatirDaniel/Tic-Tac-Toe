@@ -1,5 +1,6 @@
 package com.example.tictactoeapplication;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -17,6 +18,12 @@ public class MultiplayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Multiplayer");
+        }
+
         EditText playerOne = findViewById(R.id.playerOne);
         EditText playerTwo = findViewById(R.id.playerTwo);
         Button startGameButton = findViewById(R.id.startMultiplayerGameButton);
@@ -31,7 +38,7 @@ public class MultiplayerActivity extends AppCompatActivity {
                     Toast.makeText(MultiplayerActivity.this,"Va rog sa introduceti numele jucatorilor !",
                             Toast.LENGTH_SHORT).show();
                 }else{
-                    Intent intent = new Intent(MultiplayerActivity.this,GameActivity.class);
+                    Intent intent = new Intent(MultiplayerActivity.this,MultiplayerGameActivity.class);
                     intent.putExtra("playerOne",getPlayerOneName);
                     intent.putExtra("playerTwo",getPlayerTwoName);
                     startActivity(intent);

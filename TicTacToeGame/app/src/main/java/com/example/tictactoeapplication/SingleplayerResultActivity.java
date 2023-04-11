@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ResultActivitySingleplayer extends Dialog {
+public class SingleplayerResultActivity extends Dialog {
     private  final String message;
     private final SingleplayerGameActivity singleplayerGameActivity;
 
-    public ResultActivitySingleplayer(@NonNull Context context, String message, SingleplayerGameActivity singleplayerGameActivity){
+    public SingleplayerResultActivity(@NonNull Context context, String message, SingleplayerGameActivity singleplayerGameActivity){
         super(context);
         this.message = message;
         this.singleplayerGameActivity = singleplayerGameActivity;

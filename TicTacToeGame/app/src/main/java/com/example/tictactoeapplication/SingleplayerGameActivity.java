@@ -1,5 +1,6 @@
 package com.example.tictactoeapplication;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.BitmapFactory;
@@ -13,7 +14,6 @@ import android.widget.ImageView;
 
 import com.example.tictactoeapplication.databinding.ActivitySingleplayerGameBinding;
 
-import java.util.List;
 import java.util.Random;
 
 public class SingleplayerGameActivity extends AppCompatActivity {
@@ -31,11 +31,17 @@ public class SingleplayerGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Singleplayer");
+        }
+
         binding = ActivitySingleplayerGameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.playerOneLayoutS.setBackgroundResource(R.drawable.black_border);
 
-        // Get the player name from the previous activity
         getplayerOne = getIntent().getStringExtra("playerOne");
         getplayerAI = getIntent().getStringExtra("playerAI");
         getIconX = getIntent().getBooleanExtra("iconX", true);
@@ -122,14 +128,14 @@ public class SingleplayerGameActivity extends AppCompatActivity {
 
     private void playerWin(){
         gameActive = false;
-        ResultActivitySingleplayer resultActivity = new ResultActivitySingleplayer(SingleplayerGameActivity.this,
+        SingleplayerResultActivity resultActivity = new SingleplayerResultActivity(SingleplayerGameActivity.this,
                 getplayerOne.toString() + " este castigatorul !", SingleplayerGameActivity.this);
         resultActivity.setCancelable(false);
         resultActivity.show();
     }
     private void playerAIWin(){
         gameActive = false;
-        ResultActivitySingleplayer resultActivity = new ResultActivitySingleplayer(SingleplayerGameActivity.this,
+        SingleplayerResultActivity resultActivity = new SingleplayerResultActivity(SingleplayerGameActivity.this,
                 getplayerAI.toString() + " este castigatorul !", SingleplayerGameActivity.this);
         resultActivity.setCancelable(false);
         resultActivity.show();
@@ -137,7 +143,7 @@ public class SingleplayerGameActivity extends AppCompatActivity {
 
     private void playersDraw(){
         gameActive = false;
-        ResultActivitySingleplayer resultActivity = new ResultActivitySingleplayer(SingleplayerGameActivity.this,
+        SingleplayerResultActivity resultActivity = new SingleplayerResultActivity(SingleplayerGameActivity.this,
                 "Egalitate", SingleplayerGameActivity.this);
         resultActivity.setCancelable(false);
         resultActivity.show();
@@ -210,20 +216,13 @@ public class SingleplayerGameActivity extends AppCompatActivity {
             row = random.nextInt(3);
             col = random.nextInt(3);
         } while (gameBoard[row][col].getDrawable() != null);
-        roundCount++;
-        changePlayerTurn(playerTurn);
 
-        if (getIconX){
-            gameBoard[row][col].setImageResource(R.drawable.zero1);
-            if (checkWin(R.drawable.zero1)) {
-                playerAIWin();
-            }
-        }else{
-            gameBoard[row][col].setImageResource(R.drawable.crossed1);
-            if (checkWin(R.drawable.crossed1)) {
-                playerAIWin();
-            }
+        gameBoard[row][col].setImageResource(R.drawable.zero1);
+        if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
+            playerAIWin();
         }
+        changePlayerTurn(playerTurn);
+        roundCount++;
     }
 
 
@@ -440,62 +439,155 @@ public class SingleplayerGameActivity extends AppCompatActivity {
     }
 
     private void makeAIMoveHard() {
-        if (checkTwoInARow(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-            if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-                playerAIWin();
-            }
-            changePlayerTurn(playerTurn);
-            return;
-        }
+        int[] move = getBestMove();
+        gameBoard[move[0]][move[1]].setImageResource(getIconX ? R.drawable.zero1 : R.drawable.crossed1);
 
-        if (checkTwoInARow(getIconX ? R.drawable.crossed1 : R.drawable.zero1)) {
-            if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-                playerAIWin();
-            }
-            changePlayerTurn(playerTurn);
-            return;
-        }
+        changePlayerTurn(playerTurn);
+        roundCount++;
 
-        if (gameBoard[1][1].getDrawable() == null) {
-            gameBoard[1][1].setImageResource(getIconX ? R.drawable.zero1 : R.drawable.crossed1);
-            if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-                playerAIWin();
-            }
-            changePlayerTurn(playerTurn);
-            roundCount++;
-            return;
-        }
-
-        if (checkFork(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-            if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-                playerAIWin();
-            }
-            changePlayerTurn(playerTurn);
-            return;
-        }
-
-        if (checkFork(!getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-            if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
-                playerAIWin();
-            }
-            changePlayerTurn(playerTurn);
-            return;
-        }
-
-        Random random = new Random();
-        int i, j;
-        do {
-            i = random.nextInt(3);
-            j = random.nextInt(3);
-        } while (gameBoard[i][j].getDrawable() != null);
-
-        gameBoard[i][j].setImageResource(getIconX ? R.drawable.zero1 : R.drawable.crossed1);
         if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
             playerAIWin();
         }
-        changePlayerTurn(playerTurn);
-        roundCount++;
     }
+
+    private int[] getBestMove() {
+        int[] result = {-1, -1};
+        int bestScore = Integer.MIN_VALUE;
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (((ImageView) gameBoard[i][j]).getDrawable() == null) {
+                    gameBoard[i][j].setImageResource(getIconX ? R.drawable.zero1 : R.drawable.crossed1);
+
+                    changePlayerTurn(playerTurn);
+                    roundCount++;
+
+                    int score = minimax(false, 0, alpha, beta, new int[3][3], getIconX ? R.drawable.zero1 : R.drawable.crossed1, 5);
+                    gameBoard[i][j].setImageResource(0);
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        result[0] = i;
+                        result[1] = j;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private int minimax(boolean isMaximizingPlayer, int depth, int alpha, int beta, int[][] memo, int currentPlayer, int maxDepth) {
+        if (checkWin(getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
+            return -10 + depth;
+        } else if (checkWin(!getIconX ? R.drawable.zero1 : R.drawable.crossed1)) {
+            return 10 - depth;
+        } else if (roundCount == 9) {
+            return 0;
+        } else if (depth >= maxDepth) {
+            return evaluateBoard(memo, currentPlayer);
+        }
+
+        
+        if (isMaximizingPlayer) {
+            int bestScore = Integer.MIN_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (memo[i][j] == 0) {
+                        memo[i][j] = currentPlayer;
+                        int score = minimax(false, depth + 1, alpha, beta, memo, currentPlayer = getIconX ? R.drawable.zero1 : R.drawable.crossed1, maxDepth);
+                        memo[i][j] = 0;
+                        bestScore = Math.max(bestScore, score);
+                        alpha = Math.max(alpha, bestScore);
+                        if (alpha >= beta) {
+                            return bestScore;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (memo[i][j] == 0) {
+                        memo[i][j] = currentPlayer;
+                        int score = minimax(true, depth + 1, alpha, beta, memo, currentPlayer = getIconX ? R.drawable.zero1 : R.drawable.crossed1, maxDepth);
+                        memo[i][j] = 0;
+                        bestScore = Math.min(bestScore, score);
+                        beta = Math.min(beta, bestScore);
+                        if (alpha >= beta) {
+                            return bestScore;
+                        }
+                    }
+                }
+            }
+            return bestScore;
+        }
+    }
+
+    private int evaluateBoard(int[][] board, int currentPlayer) {
+        int score = 0;
+        int playerPiece = currentPlayer == R.drawable.crossed1 ? R.drawable.zero1 : R.drawable.crossed1;
+        int opponentPiece = playerPiece;
+
+        for (int i = 0; i < 3; i++) {
+            int rowSum = board[i][0] + board[i][1] + board[i][2];
+            int colSum = board[0][i] + board[1][i] + board[2][i];
+            if (rowSum == playerPiece * 3 || colSum == playerPiece * 3) {
+                score += 100;
+            } else if (rowSum == opponentPiece * 3 || colSum == opponentPiece * 3) {
+                score -= 100;
+            }
+        }
+
+        int diagSum1 = board[0][0] + board[1][1] + board[2][2];
+        int diagSum2 = board[0][2] + board[1][1] + board[2][0];
+        if (diagSum1 == playerPiece * 3 || diagSum2 == playerPiece * 3) {
+            score += 100;
+        } else if (diagSum1 == opponentPiece * 3 || diagSum2 == opponentPiece * 3) {
+            score -= 100;
+        }
+
+        int openRows = 0;
+        int openCols = 0;
+        int openDiags = 0;
+        for (int i = 0; i < 3; i++) {
+            int rowSum = board[i][0] + board[i][1] + board[i][2];
+            int colSum = board[0][i] + board[1][i] + board[2][i];
+            if (rowSum == playerPiece * 2 || colSum == playerPiece * 2) {
+                openRows++;
+                openCols++;
+            } else if (rowSum == opponentPiece * 2 || colSum == opponentPiece * 2) {
+                openRows--;
+                openCols--;
+            }
+        }
+        if (board[1][1] == playerPiece) {
+            if (board[0][0] == playerPiece && board[2][2] == 0 || board[0][2] == playerPiece && board[2][0] == 0
+                    || board[2][0] == playerPiece && board[0][2] == 0 || board[2][2] == playerPiece && board[0][0] == 0) {
+                openDiags++;
+            } else if (board[0][0] == opponentPiece && board[2][2] == 0 || board[0][2] == opponentPiece && board[2][0] == 0
+                    || board[2][0] == opponentPiece && board[0][2] == 0 || board[2][2] == opponentPiece && board[0][0] == 0) {
+                openDiags--;
+            }
+        } else if (board[1][1] == opponentPiece) {
+            if (board[0][0] == playerPiece && board[2][2] == 0 || board[0][2] == playerPiece && board[2][0] == 0
+                    || board[2][0] == playerPiece && board[0][2] == 0 ||board[2][2] == playerPiece && board[0][0] == 0) {
+                openDiags--;
+            } else if (board[0][0] == opponentPiece && board[2][2] == 0 || board[0][2] == opponentPiece && board[2][0] == 0
+                    || board[2][0] == opponentPiece && board[0][2] == 0 || board[2][2] == opponentPiece && board[0][0] == 0) {
+                openDiags++;
+            }
+        }
+        score += (openRows + openCols + openDiags) * 10;
+
+        return score;
+
+    }
+
     private void changePlayerTurn(boolean playerOneTurn) {
         if (playerOneTurn) {
             binding.playerOneLayoutS.setBackgroundResource(R.drawable.black_border);
@@ -507,7 +599,6 @@ public class SingleplayerGameActivity extends AppCompatActivity {
     }
 
     public void restartMatch() {
-        // Clear the game board
         for (int i = 0; i < gameBoard.length; i++) {
             for (int j = 0; j < gameBoard[i].length; j++) {
                 gameBoard[i][j].setImageDrawable(null);
@@ -519,12 +610,13 @@ public class SingleplayerGameActivity extends AppCompatActivity {
 
         if (getIconX){
             playerTurn = true;
+            binding.playerOneLayoutS.setBackgroundResource(R.drawable.black_border);
+            binding.playerTwoLayoutS.setBackgroundResource(R.drawable.white_border);
         }else{
             playerTurn = false;
+            binding.playerOneLayoutS.setBackgroundResource(R.drawable.white_border);
+            binding.playerTwoLayoutS.setBackgroundResource(R.drawable.black_border);
             makeAIMove();
         }
-
-        binding.playerOneLayoutS.setBackgroundResource(R.drawable.black_border);
-        binding.playerTwoLayoutS.setBackgroundResource(R.drawable.white_border);
     }
 }
